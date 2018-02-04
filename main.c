@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/04 19:44:50 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ int			main(int ac, char **av)
 		{
 			ssl_dispatch(&e);
 			ssl_output(&e);
-			ssl_free_env(&e);
 		}
+		ssl_free_env(&e);
 	}
 	return (0);
 }

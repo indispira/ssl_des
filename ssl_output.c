@@ -31,6 +31,7 @@ static void	ssl_output_file(t_env *e)
 	int		fd;
 
 	printf("Enter to %s\n", __FUNCTION__);
+	printf("Length output file %d\n", e->length);
 	if ((fd = open(e->outfile, O_RDWR | O_CREAT, 0644)) == -1)
 	{
 		ft_putendl("Open of the input file has failed\n");
@@ -46,8 +47,9 @@ static void	ssl_output_file(t_env *e)
 			ssl_output_base64(e, fd);
 		else if (e->cmd & DES || (e->cmd & B64 && e->flag & FLAG_D))
 		{
-			write(fd, e->out, e->length - 8);
-			ft_putstr_fd(e->out + e->length - 8, fd);
+			printf("HERE\n");
+			write(fd, e->out, e->length);
+			// ft_putstr_fd(e->out + e->length - 8, fd);
 		}
 		else
 			ft_putstr_fd(e->out, fd);

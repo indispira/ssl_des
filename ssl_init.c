@@ -31,8 +31,7 @@ void	des_init_ciphers(t_env *e, t_des *des)
 	int size;
 
 	printf("Enter to %s\n", __FUNCTION__);
-	size = e->length / 8 + 1;
-	size = e->length % 8 ? size + 1 : size;
+	size = e->length / 8 + 2;
 	if (!(des->ciphers = malloc(sizeof(char*) * size)))
 	{
 		ft_putendl("Memory allocation for Ciphers has failed.");
@@ -60,8 +59,7 @@ void	des_init_blocks(t_env *e, t_des *des)
 	int size;
 
 	printf("Enter to %s\n", __FUNCTION__);
-	size = e->length / 8 + 1;
-	size = e->length % 8 ? size + 1 : size;
+	size = e->length / 8 + 2;
 	e->nb_blocks = size - 1;
 	if (!(des->blocks = malloc(sizeof(char*) * size)))
 	{

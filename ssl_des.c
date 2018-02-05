@@ -21,8 +21,13 @@ static void	des_cut_input_in_64bits_block(t_env *e, t_des *des)
 	des_init_ciphers(e, des);
 	i = -1;
 	while (++i < e->length)
-		// printf("%d / %d\n", i, e->length);
 		des->blocks[i / 8][i % 8] = e->data[i];
+	while (i % 8 || (!(e->length % 8) && i < e->length + 8))
+	{
+		des->blocks[i / 8][i % 8] = e->length % 8 ? 8 - e->length % 8 : 8;
+		i++;
+	}
+	e->length = i;
 }
 
 int			des_encode(t_env *e)
@@ -52,6 +57,7 @@ int			des_encode(t_env *e)
 		// 	des.blocks[i][0], des.blocks[i][1], des.blocks[i][2],
 		// 	des.blocks[i][3], des.blocks[i][4], des.blocks[i][5],
 		// 	des.blocks[i][6], des.blocks[i][7]);
+		// exit(0);
 		des_initial_permutation(&des, i);
 		des_feistel_network(&des);
 		des_final_permutation(&des, i);

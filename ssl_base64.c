@@ -64,10 +64,10 @@ void		base64_encode(t_env *e, char *s, char *msg)
 	printf("Enter to %s\n", __FUNCTION__);
 	i = 0;
 	size = e->length * 4 / 3 + 4;
-	if (!(e->message = ft_strnew(size)))
+	if (!(e->out = ft_strnew(size)))
 		ssl_memory_error(e, NULL, __FUNCTION__);
-	msg = e->message;
-	while (s < e->content + e->length)
+	msg = e->out;
+	while (s < e->data + e->length)
 	{
 		if (i % 4 == 0)
 			*msg = base64_table((*s & 252) >> 2, 1);
@@ -81,7 +81,7 @@ void		base64_encode(t_env *e, char *s, char *msg)
 		i += 3;
 		msg++;
 	}
-	e->length = ft_strlen(e->message);
+	e->length = ft_strlen(e->out);
 }
 
 void		base64_decode(t_env *e, char *s, char *msg)
@@ -91,9 +91,9 @@ void		base64_decode(t_env *e, char *s, char *msg)
 
 	printf("Enter to %s\n", __FUNCTION__);
 	i = 0;
-	if (!(e->message = ft_strnew(e->length)))
+	if (!(e->out = ft_strnew(e->length)))
 		ssl_memory_error(e, NULL, __FUNCTION__);
-	msg = e->message;
+	msg = e->out;
 	while (*s && *s != '=')
 	{
 		if (i % 4 == 0)
@@ -112,5 +112,35 @@ void		base64_decode(t_env *e, char *s, char *msg)
 		}
 		i += (s++) ? 3 : 0;
 	}
-	e->length = msg - e->message;
+	e->length = msg - e->out;
+}
+
+void		base64_clean(t_env *e)
+{
+	char	*clean;
+	char	*src;
+	char	*dest;
+
+	printf("Enter to %s\n", __FUNCTION__);
+	if (!(clean = malloc(sizeof(char) * (e->length + 1))))
+	{
+		ft_putendl("Memory allocation for clean data in base64 has failed.");
+		ssl_free_env(e);
+		exit(0);
+	}
+	ft_bzero(clean, e->length + 1);
+	src = e->data;
+	dest = clean;
+	while (*src)
+	{
+		if (*src != '\n')
+		{
+			*dest = *src;
+			dest++;
+		}
+		src++;
+	}
+	ft_memdel((void**)&e->data);
+	e->data = clean;
+	e->length = ft_strlen(clean);
 }

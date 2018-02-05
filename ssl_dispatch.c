@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ssl_dispatch.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,36 +12,57 @@
 
 #include "h_ssl_des.h"
 
-static void	ssl_dispatch(t_env *e)
+void	ssl_dispatch_base64(t_env *e)
 {
 	printf("Enter to %s\n", __FUNCTION__);
-	if (e->cmd & B64)
-		ssl_dispatch_base64(e);
-	else if (e->cmd & DES)
-		ssl_dispatch_des_ecb(e);
-	else if (e->cmd & CBC)
-		ssl_dispatch_des_cbc(e);
-	else if (e->cmd & DES3)
-		ssl_dispatch_des3_ecb(e);
-	else if (e->cmd & CBC3)
-		ssl_dispatch_des3_cbc(e);
+	if (e->flag & FLAG_D)
+	{
+		base64_clean(e);
+		base64_decode(e, e->data, e->out);
+	}
+	else
+		base64_encode(e, e->data, e->out);
 }
 
-int			main(int ac, char **av)
+void	ssl_dispatch_des_ecb(t_env *e)
 {
-	t_env	e;
-
-	if (ac == 1)
-		write(1, "usage: ft_ssl command [command opts] [command args]\n", 52);
+	printf("Enter to %s\n", __FUNCTION__);
+	if (e->flag & FLAG_D)
+	{
+		if (e->flag & FLAG_A)
+		{
+			base64_clean(e);
+			base64_decode(e, e->data, e->out);
+			ft_memdel((void**)&e->data);
+			e->data = e->out;
+			e->out = NULL;
+		}
+		des_decode(e);
+	}
 	else
 	{
-		ssl_init_env(&e);
-		if (ssl_parse(ac, av, &e) && ssl_read(&e))
+		des_encode(e);
+		if (e->flag & FLAG_A)
 		{
-			ssl_dispatch(&e);
-			ssl_output(&e);
+			ft_memdel((void**)&e->data);
+			e->data = e->out;
+			e->out = NULL;
+			base64_encode(e, e->data, e->out);
 		}
-		ssl_free_env(&e);
 	}
-	return (0);
+}
+
+void	ssl_dispatch_des_cbc(t_env *e)
+{
+	(void)e;
+}
+
+void	ssl_dispatch_des3_ecb(t_env *e)
+{
+	(void)e;
+}
+
+void	ssl_dispatch_des3_cbc(t_env *e)
+{
+	(void)e;
 }

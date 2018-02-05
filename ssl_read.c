@@ -22,15 +22,15 @@ static int	read_stream(t_env *e, int fd)
 	tmp = NULL;
 	while ((size = read(fd, buffer, 1024)) > 0)
 	{
-		if (!e->content)
-			e->content = ft_memcpy(ft_strnew(size + 8), buffer, size);
+		if (!e->data)
+			e->data = ft_memcpy(ft_strnew(size + 8), buffer, size);
 		else
 		{
 			tmp = ft_memalloc(e->length + size + 2);
-			ft_memcpy(tmp, e->content, e->length);
-			ft_memdel((void**)&e->content);
-			e->content = tmp;
-			ft_memcpy(e->content + e->length, buffer, size);
+			ft_memcpy(tmp, e->data, e->length);
+			ft_memdel((void**)&e->data);
+			e->data = tmp;
+			ft_memcpy(e->data + e->length, buffer, size);
 		}
 		e->length += size;
 	}
@@ -42,7 +42,7 @@ static int	read_file(t_env *e)
 	int		fd;
 
 	printf("Enter to %s\n", __FUNCTION__);
-	if ((fd = open(e->input, O_RDONLY)) == -1)
+	if ((fd = open(e->infile, O_RDONLY)) == -1)
 	{
 		ft_putendl_fd("Open of the input file has failed\n", 2);
 		ssl_free_env(e);
@@ -62,7 +62,7 @@ static int	read_file(t_env *e)
 int			ssl_read(t_env *e)
 {
 	printf("Enter to %s\n", __FUNCTION__);
-	if (e->flag & FLAG_I && !e->input)
+	if (e->flag & FLAG_I && !e->infile)
 		return (write(2, "Requires an input file.\n", 24));
 	if (e->flag & FLAG_I)
 		return (read_file(e));

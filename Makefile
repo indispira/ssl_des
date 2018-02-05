@@ -15,7 +15,7 @@ NAME =		ft_ssl
 CC =		gcc
 CFLAGS =	-Wall -Werror -Wextra -g -fsanitize=address -I $(HEADERS)
 SRCS =		main.c ssl_errors.c ssl_parse.c ssl_read.c ssl_output.c \
-			ssl_base64.c ssl_init.c ssl_free.c \
+			ssl_base64.c ssl_init.c ssl_free.c ssl_dispatch.c\
 			ssl_des.c ssl_des_tools.c ssl_des_subkeys.c ssl_des_constantes.c \
 			ssl_des_blocks.c ssl_des_function_f.c
 OBJS =		$(SRCS:.c=.o)

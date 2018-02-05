@@ -23,6 +23,7 @@
 # define DES		2
 # define CBC		4
 # define DES3		8
+# define CBC3		16
 
 # define FLAG_E		1
 # define FLAG_D		2
@@ -45,10 +46,10 @@ typedef struct		s_env
 	char			cmd;
 	char			flag;
 	const char		*pass;
-	const char		*input;
-	const char		*output;
-	char			*content;
-	char			*message;
+	const char		*infile;
+	const char		*outfile;
+	char			*data;
+	char			*out;
 	int				nb_blocks;
 	int				length;
 }					t_env;
@@ -78,6 +79,7 @@ void				ssl_memory_error(t_env *e, t_des *des, const char *fct);
 void				ssl_error_flags(const char *arg, char flag, t_env *e);
 
 void				ssl_free_env(t_env *e);
+void				des_free_stc(t_des *des);
 void				des_free_keys(t_des *des);
 
 void				ssl_init_env(t_env *e);
@@ -85,8 +87,15 @@ void				des_init_struct(t_des *des);
 void				des_init_blocks(t_env *e, t_des *des);
 void				des_init_ciphers(t_env *e, t_des *des);
 
+void				ssl_dispatch_base64(t_env *e);
+void				ssl_dispatch_des_ecb(t_env *e);
+void				ssl_dispatch_des_cbc(t_env *e);
+void				ssl_dispatch_des3_ecb(t_env *e);
+void				ssl_dispatch_des3_cbc(t_env *e);
+
 void				base64_encode(t_env *e, char *s, char *msg);
 void				base64_decode(t_env *e, char *s, char *msg);
+void				base64_clean(t_env *e);
 
 int					des_encode(t_env *e);
 int					des_decode(t_env *e);

@@ -34,12 +34,12 @@ static int	ssl_get_next_arg(t_env *e, int ac, char **av, int id)
 	if (!ft_strcmp("-i", av[id]) || !ft_strcmp("-in", av[id]))
 	{
 		e->flag |= FLAG_I;
-		e->input = av[id + 1];
+		e->infile = av[id + 1];
 	}
 	if (!ft_strcmp("-o", av[id]) || !ft_strcmp("-out", av[id]))
 	{
 		e->flag |= FLAG_O;
-		e->output = av[id + 1];
+		e->outfile = av[id + 1];
 	}
 	return (id + 1);
 }
@@ -81,10 +81,14 @@ int			ssl_parse(int ac, char **av, t_env *e)
 	printf("Enter to %s\n", __FUNCTION__);
 	if (!ft_strcmp("base64", av[1]))
 		e->cmd = B64;
-	if (!ft_strcmp("des", av[1]) || !ft_strcmp("des-ecb", av[1]))
+	else if (!ft_strcmp("des", av[1]) || !ft_strcmp("des-ecb", av[1]))
 		e->cmd = DES;
-	if (!ft_strcmp("des-cbc", av[1]))
+	else if (!ft_strcmp("des-cbc", av[1]))
 		e->cmd = CBC;
+	else if (!ft_strcmp("des3", av[1]) || !ft_strcmp("des3-ecb", av[1]))
+		e->cmd = DES3;
+	else if (!ft_strcmp("des3-cbc", av[1]))
+		e->cmd = CBC3;
 	if (e->cmd)
 		return (ssl_args_parser(ac, av, e));
 	return (ssl_help(av[1]));

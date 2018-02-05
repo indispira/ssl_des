@@ -59,7 +59,7 @@ char		**ft_strsplit(char const *s, char c)
 	i_tab = 0;
 	while (nb_words--)
 	{
-		while (*s == c && s != '\0')
+		while (*s == c && *s != '\0')
 			s++;
 		tab[i_tab] = ft_strsub(s, 0, ft_word_length(s, c));
 		if (!tab[i_tab])

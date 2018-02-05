@@ -14,8 +14,22 @@
 
 void		ssl_free_env(t_env *e)
 {
-	if (e->content)
-		ft_memdel((void**)&e->content);
-	if (e->message)
-		ft_memdel((void**)&e->message);
+	if (e->data)
+		ft_memdel((void**)&e->data);
+	if (e->out)
+		ft_memdel((void**)&e->out);
+}
+
+void		des_free_stc(t_des *des)
+{
+	int		i;
+
+	i = -1;
+	while (des->blocks[++i])
+		ft_memdel((void**)&des->blocks[i]);
+	ft_memdel((void**)&des->blocks);
+	i = -1;
+	while (des->ciphers[++i])
+		ft_memdel((void**)&des->ciphers[i]);
+	ft_memdel((void**)&des->ciphers);
 }

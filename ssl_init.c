@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ssl_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -17,10 +17,10 @@ void	ssl_init_env(t_env *e)
 	e->cmd = 0;
 	e->flag = 0;
 	e->pass = NULL;
-	e->input = NULL;
-	e->output = NULL;
-	e->content = NULL;
-	e->message = NULL;
+	e->infile = NULL;
+	e->outfile = NULL;
+	e->data = NULL;
+	e->out = NULL;
 	e->nb_blocks = 0;
 	e->length = 0;
 }

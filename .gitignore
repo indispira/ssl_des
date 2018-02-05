@@ -1,4 +1,6 @@
 ft_ssl
+log*
+run.sh
 
 # Prerequisites
 *.d

@@ -22,7 +22,7 @@ static void	des_cut_input_in_64bits_block(t_env *e, t_des *des)
 	i = -1;
 	while (++i < e->length)
 		// printf("%d / %d\n", i, e->length);
-		des->blocks[i / 8][i % 8] = e->content[i];
+		des->blocks[i / 8][i % 8] = e->data[i];
 }
 
 int			des_encode(t_env *e)
@@ -57,18 +57,19 @@ int			des_encode(t_env *e)
 		des_final_permutation(&des, i);
 		i++;
 	}
-	e->message = ft_memalloc(8 * e->nb_blocks + 1);
+	e->out = ft_memalloc(8 * e->nb_blocks + 1);
 	e->length = e->nb_blocks * 8;
 	i = 0;
 	while (des.ciphers[i])
 	{
-		ft_memcpy(e->message + (i * 8), des.ciphers[i], 8);
+		ft_memcpy(e->out + (i * 8), des.ciphers[i], 8);
 		printf("CIP: %2hhx %2hhx %2hhx %2hhx | %2hhx %2hhx %2hhx %2hhx\n",
 			des.ciphers[i][0], des.ciphers[i][1], des.ciphers[i][2],
 			des.ciphers[i][3], des.ciphers[i][4], des.ciphers[i][5],
 			des.ciphers[i][6], des.ciphers[i][7]);
 		i++;
 	}
+	des_free_stc(&des);
 	return (0);
 }
 
@@ -104,17 +105,18 @@ int			des_decode(t_env *e)
 		des_final_permutation(&des, i);
 		i++;
 	}
-	e->message = ft_memalloc(8 * e->nb_blocks + 1);
+	e->out = ft_memalloc(8 * e->nb_blocks + 1);
 	e->length = e->nb_blocks * 8;
 	i = 0;
 	while (des.ciphers[i])
 	{
-		ft_memcpy(e->message + (i * 8), des.ciphers[i], 8);
+		ft_memcpy(e->out + (i * 8), des.ciphers[i], 8);
 		printf("CIP: %2hhx %2hhx %2hhx %2hhx | %2hhx %2hhx %2hhx %2hhx\n",
 			des.ciphers[i][0], des.ciphers[i][1], des.ciphers[i][2],
 			des.ciphers[i][3], des.ciphers[i][4], des.ciphers[i][5],
 			des.ciphers[i][6], des.ciphers[i][7]);
 		i++;
 	}
+	des_free_stc(&des);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/17 16:34:34 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ void	ssl_init_env(t_env *e)
 {
 	e->cmd = 0;
 	e->flag = 0;
-	e->pass = NULL;
+	e->pass1 = NULL;
+	e->pass2 = NULL;
+	e->pass3 = NULL;
 	e->infile = NULL;
 	e->outfile = NULL;
 	e->data = NULL;

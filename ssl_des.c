@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/17 16:31:29 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	des_cut_input_in_64bits_block(t_env *e, t_des *des)
 	e->length = i;
 }
 
-int			des_encode(t_env *e)
+int			des_encode(t_env *e, const char *pass)
 {
 	t_des	des;
 	int		i;
@@ -38,7 +38,7 @@ int			des_encode(t_env *e)
 	printf("Enter to %s\n", __FUNCTION__);
 	des_init_struct(&des);
 	if (e->flag & FLAG_K)
-		ft_memcpy(des.key, e->pass, 8);
+		ft_memcpy(des.key, pass, 8);
 	else
 		des_create_key(e, &des);
 	des_permuted_choice_1(&des);
@@ -79,7 +79,7 @@ int			des_encode(t_env *e)
 	return (0);
 }
 
-int			des_decode(t_env *e)
+int			des_decode(t_env *e, const char *pass)
 {
 	t_des	des;
 	int		i;
@@ -87,7 +87,7 @@ int			des_decode(t_env *e)
 	printf("Enter to %s\n", __FUNCTION__);
 	des_init_struct(&des);
 	if (e->flag & FLAG_K)
-		ft_memcpy(des.key, e->pass, 8);
+		ft_memcpy(des.key, pass, 8);
 	else
 		des_create_key(e, &des);
 	des_permuted_choice_1(&des);

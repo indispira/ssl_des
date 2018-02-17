@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/04 19:44:50 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/17 16:33:27 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,10 @@ static void	ssl_dispatch(t_env *e)
 	printf("Enter to %s\n", __FUNCTION__);
 	if (e->cmd & B64)
 		ssl_dispatch_base64(e);
-	else if (e->cmd & DES)
-		ssl_dispatch_des_ecb(e);
-	else if (e->cmd & CBC)
-		ssl_dispatch_des_cbc(e);
-	else if (e->cmd & DES3)
-		ssl_dispatch_des3_ecb(e);
-	else if (e->cmd & CBC3)
-		ssl_dispatch_des3_cbc(e);
+	else if (e->cmd & DES || e->cmd & CBC)
+		ssl_dispatch_des(e);
+	else if (e->cmd & DES3 || e->cmd & CBC3)
+		ssl_dispatch_des3(e);
 }
 
 int			main(int ac, char **av)

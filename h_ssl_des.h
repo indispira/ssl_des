@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 15:46:29 by sboulet           #+#    #+#             */
-/*   Updated: 2017/01/27 17:14:25 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/17 16:30:18 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ typedef struct		s_env
 {
 	char			cmd;
 	char			flag;
-	const char		*pass;
+	const char		*pass1;
+	const char		*pass2;
+	const char		*pass3;
 	const char		*infile;
 	const char		*outfile;
 	char			*data;
@@ -75,6 +77,7 @@ int					ssl_ed(void);
 void				ssl_output(t_env *e);
 void				ssl_print_usage_base64(void);
 void				ssl_print_usage_des(void);
+void				ssl_print_usage_des3(void);
 void				ssl_memory_error(t_env *e, t_des *des, const char *fct);
 void				ssl_error_flags(const char *arg, char flag, t_env *e);
 
@@ -88,17 +91,15 @@ void				des_init_blocks(t_env *e, t_des *des);
 void				des_init_ciphers(t_env *e, t_des *des);
 
 void				ssl_dispatch_base64(t_env *e);
-void				ssl_dispatch_des_ecb(t_env *e);
-void				ssl_dispatch_des_cbc(t_env *e);
-void				ssl_dispatch_des3_ecb(t_env *e);
-void				ssl_dispatch_des3_cbc(t_env *e);
+void				ssl_dispatch_des(t_env *e);
+void				ssl_dispatch_des3(t_env *e);
 
 void				base64_encode(t_env *e, char *s, char *msg);
 void				base64_decode(t_env *e, char *s, char *msg);
 void				base64_clean(t_env *e);
 
-int					des_encode(t_env *e);
-int					des_decode(t_env *e);
+int					des_encode(t_env *e, const char *pass);
+int					des_decode(t_env *e, const char *pass);
 void				des_create_key(t_env *e, t_des *des);
 void				des_permuted_choice_1(t_des *des);
 void				des_shift_keys(t_des *des, int round, int encode);

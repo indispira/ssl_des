@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/17 16:34:14 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	ssl_help(char *s)
 	write(2, s, ft_strlen(s));
 	write(2, "' is an invalid command.\n\nStandard commands:\n\n", 46);
 	write(2, "Message Digest commands:\n\nCipher commands:\n", 43);
-	write(2, "base64\ndes\ndes-ecb\ndes-cbc\n", 27);
+	write(2, "base64\ndes\ndes-ecb\ndes-cbc\ndes3\ndes3-ecb\ndes3-cbc\n", 50);
 	return (0);
 }
 
@@ -29,7 +29,7 @@ static int	ssl_get_next_arg(t_env *e, int ac, char **av, int id)
 	if (!ft_strcmp("-k", av[id]))
 	{
 		e->flag |= FLAG_K;
-		e->pass = av[id + 1];
+		e->pass1 = av[id + 1];
 	}
 	if (!ft_strcmp("-i", av[id]) || !ft_strcmp("-in", av[id]))
 	{

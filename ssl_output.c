@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/18 23:03:16 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static void	ssl_output_base64(t_env *e, int fd)
 {
 	int i;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	i = 0;
 	while (i < e->length)
 	{
@@ -30,8 +29,6 @@ static void	ssl_output_file(t_env *e)
 {
 	int		fd;
 
-	printf("Enter to %s\n", __FUNCTION__);
-	printf("Length output file %d\n", e->length);
 	if ((fd = open(e->outfile, O_RDWR | O_CREAT, 0644)) == -1)
 	{
 		ft_putendl("Open of the input file has failed\n");
@@ -66,7 +63,6 @@ static void	ssl_output_file(t_env *e)
 
 void		ssl_output(t_env *e)
 {
-	printf("Enter to %s\n", __FUNCTION__);
 	if (e->flag & FLAG_O && !e->outfile)
 		write(2, "Requires an outfile file.\n", 24);
 	else if (e->flag & FLAG_O)

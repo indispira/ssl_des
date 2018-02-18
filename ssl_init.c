@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/17 16:34:34 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/18 22:59:14 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ void	des_init_ciphers(t_env *e, t_des *des)
 	int i;
 	int size;
 
-	printf("Enter to %s\n", __FUNCTION__);
-	size = e->length / 8 + 2;
+	size = e->flag & FLAG_D ? e->length / 8 + 1 : e->length / 8 + 2;
 	if (!(des->ciphers = malloc(sizeof(char*) * size)))
 	{
 		ft_putendl("Memory allocation for Ciphers has failed.");
@@ -60,8 +59,7 @@ void	des_init_blocks(t_env *e, t_des *des)
 	int i;
 	int size;
 
-	printf("Enter to %s\n", __FUNCTION__);
-	size = e->length / 8 + 2;
+	size = e->flag & FLAG_D ? e->length / 8 + 1 : e->length / 8 + 2;
 	e->nb_blocks = size - 1;
 	if (!(des->blocks = malloc(sizeof(char*) * size)))
 	{
@@ -88,7 +86,6 @@ void	des_init_struct(t_des *des)
 {
 	int i;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	ft_memset(des->key, 0, 8);
 	ft_memset(des->leftkey, 0, 4);
 	ft_memset(des->rightkey, 0, 4);

@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/17 16:34:14 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/18 22:59:37 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ static int	ssl_args_parser(int ac, char **av, t_env *e)
 	int			i;
 	const char	*arg;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	i = 1;
 	while (++i < ac)
 	{
@@ -78,7 +77,6 @@ static int	ssl_args_parser(int ac, char **av, t_env *e)
 
 int			ssl_parse(int ac, char **av, t_env *e)
 {
-	printf("Enter to %s\n", __FUNCTION__);
 	if (!ft_strcmp("base64", av[1]))
 		e->cmd = B64;
 	else if (!ft_strcmp("des", av[1]) || !ft_strcmp("des-ecb", av[1]))

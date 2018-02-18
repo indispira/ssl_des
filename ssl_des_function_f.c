@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/18 22:55:59 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static void	des_expansion_e(t_des *des, char *block)
 	int i;
 	int j;
 
-	// printf("Enter to %s\n", __FUNCTION__);
 	i = 31;
 	while (i != 63)
 	{
@@ -44,7 +43,6 @@ static void	des_expansion_e(t_des *des, char *block)
 
 static void	des_reset_variables_function_f(t_des *des)
 {
-	// printf("Enter to %s\n", __FUNCTION__);
 	ft_memset(des->exp, 0, 8);
 	ft_memset(des->box, 0, 4);
 	ft_memset(des->perm, 0, 4);
@@ -54,7 +52,6 @@ void		des_function_f(t_des *des, int id, char *block)
 {
 	int	i;
 
-	// printf("Enter to %s                              Round %d\n", __FUNCTION__, id);
 	des_reset_variables_function_f(des);
 	des_expansion_e(des, block);
 	i = -1;

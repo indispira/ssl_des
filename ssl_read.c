@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/18 23:02:10 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static int	read_stream(t_env *e, int fd)
 	char	buffer[1024];
 	char	*tmp;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	tmp = NULL;
 	while ((size = read(fd, buffer, 1024)) > 0)
 	{
@@ -41,7 +40,6 @@ static int	read_file(t_env *e)
 {
 	int		fd;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	if ((fd = open(e->infile, O_RDONLY)) == -1)
 	{
 		ft_putendl_fd("Open of the input file has failed\n", 2);
@@ -61,7 +59,6 @@ static int	read_file(t_env *e)
 
 int			ssl_read(t_env *e)
 {
-	printf("Enter to %s\n", __FUNCTION__);
 	if (e->flag & FLAG_I && !e->infile)
 		return (write(2, "Requires an input file.\n", 24));
 	if (e->flag & FLAG_I)

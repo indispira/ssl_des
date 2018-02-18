@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/18 23:02:49 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void		base64_encode(t_env *e, char *s, char *msg)
 	int		i;
 	int		size;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	i = 0;
 	size = e->length * 4 / 3 + 4;
 	if (!(e->out = ft_strnew(size)))
@@ -89,7 +88,6 @@ void		base64_decode(t_env *e, char *s, char *msg)
 	int		i;
 	char	c;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	i = 0;
 	if (!(e->out = ft_strnew(e->length)))
 		ssl_memory_error(e, NULL, __FUNCTION__);
@@ -121,7 +119,6 @@ void		base64_clean(t_env *e)
 	char	*src;
 	char	*dest;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	if (!(clean = malloc(sizeof(char) * (e->length + 1))))
 	{
 		ft_putendl("Memory allocation for clean data in base64 has failed.");

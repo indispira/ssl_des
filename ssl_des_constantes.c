@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/18 17:18:51 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void		constantes_des_permuted_choice_2(t_des *des, int id)
 					40, 51, 30, 36, 46, 54, 29, 39, 50, 44, 32, 47,
 					43, 48, 38, 55, 33, 52, 45, 41, 49, 35, 28, 31};
 
-	printf("Enter to %s\n", __FUNCTION__);
+	// printf("Enter to %s\n", __FUNCTION__);
 	i = -1;
 	while (++i < 48)
 	{

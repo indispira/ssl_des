@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 15:46:29 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/17 16:30:18 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/18 16:42:36 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,9 @@ typedef struct		s_des
 int					ssl_parse(int ac, char **av, t_env *e);
 int					ssl_read(t_env *e);
 int					ssl_ed(void);
+void				ssl_dispatch(t_env *e);
 void				ssl_output(t_env *e);
+
 void				ssl_print_usage_base64(void);
 void				ssl_print_usage_des(void);
 void				ssl_print_usage_des3(void);
@@ -89,10 +91,6 @@ void				ssl_init_env(t_env *e);
 void				des_init_struct(t_des *des);
 void				des_init_blocks(t_env *e, t_des *des);
 void				des_init_ciphers(t_env *e, t_des *des);
-
-void				ssl_dispatch_base64(t_env *e);
-void				ssl_dispatch_des(t_env *e);
-void				ssl_dispatch_des3(t_env *e);
 
 void				base64_encode(t_env *e, char *s, char *msg);
 void				base64_decode(t_env *e, char *s, char *msg);

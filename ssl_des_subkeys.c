@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/18 22:56:35 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void		des_shift_keys(t_des *des, int round, int encode)
 	char	l;
 	char	r;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	i = 0;
 	l = des->leftkey[0] & BIT_7;
 	r = des->rightkey[0] & BIT_7;
@@ -56,7 +55,6 @@ void		des_permuted_choice_1(t_des *des)
 	int		i;
 	int		j;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	i = 248;
 	j = 7;
 	while (i != 192 && j--)
@@ -90,7 +88,6 @@ void		des_create_key(t_env *e, t_des *des)
 	char	*tmp1;
 	char	*tmp2;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	tmp1 = getpass("enter des encryption password:");
 	if (!(tmp2 = ft_strnew(ft_strlen(tmp1))))
 		ssl_memory_error(e, des, __FUNCTION__);

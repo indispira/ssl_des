@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2017/02/18 17:13:43 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/18 22:52:35 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void		des_final_permutation(t_des *des, int id)
 	int		i;
 	int		j;
 
-	// printf("Enter to %s\n", __FUNCTION__);
 	i = 39;
 	j = 0;
 	while (i < 64)
@@ -51,7 +50,6 @@ void		des_feistel_network(t_des *des)
 {
 	int		i;
 
-	// printf("Enter to %s\n", __FUNCTION__);
 	i = -1;
 	while (++i < 16)
 	{
@@ -78,7 +76,6 @@ void		des_initial_permutation(t_des *des, int id)
 {
 	int		i;
 
-	// printf("Enter to %s\n", __FUNCTION__);
 	ft_memset(des->left, 0, 4);
 	ft_memset(des->right, 0, 4);
 	i = 57;

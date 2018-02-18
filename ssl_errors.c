@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/17 16:03:13 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/18 22:58:29 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,16 @@ void	ssl_error_flags(const char *arg, char flag, t_env *e)
 		ft_putstr_fd("des:\tinvalid option -- ", 2);
 	else if (e->cmd & CBC)
 		ft_putstr_fd("des-cbc:\tinvalid option -- ", 2);
+	else if (e->cmd & DES3)
+		ft_putstr_fd("des3:\tinvalid option -- ", 2);
+	else if (e->cmd & CBC3)
+		ft_putstr_fd("des3-cbc:\tinvalid option -- ", 2);
 	flag ? write(1, arg, 1) : ft_putstr(arg);
 	if (e->cmd & B64)
 		ssl_print_usage_base64();
 	else if (e->cmd & DES || e->cmd & CBC)
 		ssl_print_usage_des();
+	else if (e->cmd & DES3 || e->cmd & CBC3)
+		ssl_print_usage_des3();
 	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/17 16:31:29 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/18 23:00:48 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,30 @@ static void	des_cut_input_in_64bits_block(t_env *e, t_des *des)
 {
 	int i;
 
-	printf("Enter to %s\n", __FUNCTION__);
 	des_init_blocks(e, des);
 	des_init_ciphers(e, des);
 	i = -1;
 	while (++i < e->length)
 		des->blocks[i / 8][i % 8] = e->data[i];
-	while (i % 8 || (!(e->length % 8) && i < e->length + 8))
-	{
-		des->blocks[i / 8][i % 8] = e->length % 8 ? 8 - e->length % 8 : 8;
-		i++;
-	}
+	if (!(e->flag & FLAG_D))
+		while (i % 8 || (!(e->length % 8) && i < e->length + 8))
+		{
+			des->blocks[i / 8][i % 8] = e->length % 8 ? 8 - e->length % 8 : 8;
+			i++;
+		}
 	e->length = i;
+}
+
+void		des_depadding(t_env *e)
+{
+	int		i;
+	int		new_len;
+
+	i = e->out[e->length - 1];
+	new_len = e->length - i;
+	while (i--)
+		e->out[new_len + i] = '\0';
+	e->length = new_len;
 }
 
 int			des_encode(t_env *e, const char *pass)
@@ -35,7 +47,7 @@ int			des_encode(t_env *e, const char *pass)
 	t_des	des;
 	int		i;
 
-	printf("Enter to %s\n", __FUNCTION__);
+	dprintf(2, "Enter to %s\n", __FUNCTION__);
 	des_init_struct(&des);
 	if (e->flag & FLAG_K)
 		ft_memcpy(des.key, pass, 8);
@@ -52,12 +64,6 @@ int			des_encode(t_env *e, const char *pass)
 	i = 0;
 	while (des.blocks[i])
 	{
-		// printf("\nStart encoding the block : %s\n", des.blocks[i]);
-		// printf("BLK: %3hhu %3hhu %3hhu %3hhu | %3hhu %3hhu %3hhu %3hhu\n",
-		// 	des.blocks[i][0], des.blocks[i][1], des.blocks[i][2],
-		// 	des.blocks[i][3], des.blocks[i][4], des.blocks[i][5],
-		// 	des.blocks[i][6], des.blocks[i][7]);
-		// exit(0);
 		des_initial_permutation(&des, i);
 		des_feistel_network(&des);
 		des_final_permutation(&des, i);
@@ -84,7 +90,7 @@ int			des_decode(t_env *e, const char *pass)
 	t_des	des;
 	int		i;
 
-	printf("Enter to %s\n", __FUNCTION__);
+	dprintf(2, "Enter to %s\n", __FUNCTION__);
 	des_init_struct(&des);
 	if (e->flag & FLAG_K)
 		ft_memcpy(des.key, pass, 8);
@@ -101,11 +107,6 @@ int			des_decode(t_env *e, const char *pass)
 	i = 0;
 	while (des.blocks[i])
 	{
-		// printf("\nStart decoding the block : %s\n", des.blocks[i]);
-		// printf("BLK: %3hhu %3hhu %3hhu %3hhu | %3hhu %3hhu %3hhu %3hhu\n",
-		// 	des.blocks[i][0], des.blocks[i][1], des.blocks[i][2],
-		// 	des.blocks[i][3], des.blocks[i][4], des.blocks[i][5],
-		// 	des.blocks[i][6], des.blocks[i][7]);
 		des_initial_permutation(&des, i);
 		des_feistel_network(&des);
 		des_final_permutation(&des, i);
@@ -123,6 +124,7 @@ int			des_decode(t_env *e, const char *pass)
 			des.ciphers[i][6], des.ciphers[i][7]);
 		i++;
 	}
+	des_depadding(e);
 	des_free_stc(&des);
 	return (0);
 }

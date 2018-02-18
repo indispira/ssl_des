@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/17 16:32:21 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/18 22:57:15 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,8 @@ static void	ssl_flag_a(t_env *e)
 
 }
 
-void	ssl_dispatch_base64(t_env *e)
+static void	ssl_dispatch_base64(t_env *e)
 {
-	printf("Enter to %s\n", __FUNCTION__);
 	if (e->flag & FLAG_D)
 	{
 		base64_clean(e);
@@ -44,9 +43,8 @@ void	ssl_dispatch_base64(t_env *e)
 		base64_encode(e, e->data, e->out);
 }
 
-void	ssl_dispatch_des(t_env *e)
+static void	ssl_dispatch_des(t_env *e)
 {
-	printf("Enter to %s\n", __FUNCTION__);
 	if (e->flag & FLAG_D)
 	{
 		ssl_flag_a(e);
@@ -59,9 +57,8 @@ void	ssl_dispatch_des(t_env *e)
 	}
 }
 
-void	ssl_dispatch_des3(t_env *e)
+static void	ssl_dispatch_des3(t_env *e)
 {
-	printf("Enter to %s\n", __FUNCTION__);
 	if (e->flag & FLAG_D)
 	{
 		ssl_flag_a(e);
@@ -76,4 +73,14 @@ void	ssl_dispatch_des3(t_env *e)
 		des_encode(e, e->pass3);
 		ssl_flag_a(e);
 	}
+}
+
+void		ssl_dispatch(t_env *e)
+{
+	if (e->cmd & B64)
+		ssl_dispatch_base64(e);
+	else if (e->cmd & DES || e->cmd & CBC)
+		ssl_dispatch_des(e);
+	else if (e->cmd & DES3 || e->cmd & CBC3)
+		ssl_dispatch_des3(e);
 }

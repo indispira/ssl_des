@@ -6,41 +6,16 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/24 12:17:06 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/24 18:22:40 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "h_ssl_des.h"
 
-static int	ssl_help(char *s)
-{
-	write(2, "ft_ssl: Error: '", 16);
-	write(2, s, ft_strlen(s));
-	write(2, "' is an invalid command.\n\nStandard commands:\n\n", 46);
-	write(2, "Message Digest commands:\n\nCipher commands:\n", 43);
-	write(2, "base64\ndes\ndes-ecb\ndes-cbc\ndes3\ndes3-ecb\ndes3-cbc\n", 50);
-	return (0);
-}
-
-static int	ssl_get_next_arg(t_env *e, int ac, char **av, int id)
+static int	ssl_get_filename(t_env *e, int ac, char **av, int id)
 {
 	if (id + 1 >= ac)
-		e->cmd & B64 ? ssl_print_usage_base64() : ssl_print_usage_des();
-	if (!ft_strcmp("-k", av[id]) || !ft_strcmp("-k1", av[id]))
-	{
-		e->flag |= FLAG_K1;
-		e->pass1 = av[id + 1];
-	}
-	if (!ft_strcmp("-k2", av[id]))
-	{
-		e->flag |= FLAG_K2;
-		e->pass2 = av[id + 1];
-	}
-	if (!ft_strcmp("-k3", av[id]))
-	{
-		e->flag |= FLAG_K3;
-		e->pass3 = av[id + 1];
-	}
+		ssl_print_usage(e);
 	if (!ft_strcmp("-i", av[id]) || !ft_strcmp("-in", av[id]))
 	{
 		e->flag |= FLAG_I;
@@ -50,6 +25,33 @@ static int	ssl_get_next_arg(t_env *e, int ac, char **av, int id)
 	{
 		e->flag |= FLAG_O;
 		e->outfile = av[id + 1];
+	}
+	return (id + 1);
+}
+
+static int	ssl_get_passphrase(t_env *e, int ac, char **av, int id)
+{
+	if (id + 1 >= ac)
+		ssl_print_usage(e);
+	if (!ft_strcmp("-k", av[id]) || !ft_strcmp("-k1", av[id]))
+	{
+		e->flag |= FLAG_K1;
+		e->pass1 = av[id + 1];
+	}
+	else if (!ft_strcmp("-k2", av[id]))
+	{
+		e->flag |= FLAG_K2;
+		e->pass2 = av[id + 1];
+	}
+	else if (!ft_strcmp("-k3", av[id]))
+	{
+		e->flag |= FLAG_K3;
+		e->pass3 = av[id + 1];
+	}
+	else if (!ft_strcmp("-v", av[id]))
+	{
+		e->flag |= FLAG_V;
+		e->iv = av[id + 1];
 	}
 	return (id + 1);
 }
@@ -72,11 +74,13 @@ static int	ssl_args_parser(int ac, char **av, t_env *e)
 	while (++i < ac)
 	{
 		arg = av[i];
-		if (!ft_strcmp("-k", arg) || !ft_strcmp("-i", arg)
-			|| !ft_strcmp("-in", arg) || !ft_strcmp("-o", arg)
-			|| !ft_strcmp("-out", arg) || !ft_strcmp("-k1", arg)
-			|| !ft_strcmp("-k2", arg) || !ft_strcmp("-k3", arg))
-			i = ssl_get_next_arg(e, ac, av, i);
+		if (!ft_strcmp("-i", arg) || !ft_strcmp("-in", arg)
+			|| !ft_strcmp("-o", arg) || !ft_strcmp("-out", arg))
+			i = ssl_get_filename(e, ac, av, i);
+		else if (!ft_strcmp("-k", arg) || !ft_strcmp("-k1", arg)
+			|| !ft_strcmp("-k2", arg) || !ft_strcmp("-k3", arg)
+			|| !ft_strcmp("-v", arg))
+			i = ssl_get_passphrase(e, ac, av, i);
 		else if (*arg == '-')
 			while (*(++arg))
 				ssl_check_flags(e, *arg);

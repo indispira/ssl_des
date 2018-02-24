@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/23 14:57:56 by sboulet           #+#    #+#             */
-/*   Updated: 2016/03/28 17:03:23 by sboulet          ###   ########.fr       */
+/*   Updated: 2018/02/24 18:01:30 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,6 @@ int					ft_atoi_base(const char *str, int base);
 int					ft_atoi_hexa(const char *str);
 void				ft_tabrev(int *tab, size_t size);
 int					ft_intlen(int nb);
+int					ft_hex(char c);
 
 #endif

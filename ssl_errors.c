@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/18 22:58:29 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/24 17:03:53 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,18 @@ void	ssl_error_flags(const char *arg, char flag, t_env *e)
 	else if (e->cmd & CBC3)
 		ft_putstr_fd("des3-cbc:\tinvalid option -- ", 2);
 	flag ? write(1, arg, 1) : ft_putstr(arg);
-	if (e->cmd & B64)
-		ssl_print_usage_base64();
-	else if (e->cmd & DES || e->cmd & CBC)
-		ssl_print_usage_des();
-	else if (e->cmd & DES3 || e->cmd & CBC3)
-		ssl_print_usage_des3();
+	if (e->cmd & B64 || e->cmd & DES || e->cmd & CBC3
+		|| e->cmd & DES3 || e->cmd & CBC3)
+		ssl_print_usage(e);
 	exit(0);
+}
+
+int		ssl_help(char *s)
+{
+	write(2, "ft_ssl: Error: '", 16);
+	write(2, s, ft_strlen(s));
+	write(2, "' is an invalid command.\n\nStandard commands:\n\n", 46);
+	write(2, "Message Digest commands:\n\nCipher commands:\n", 43);
+	write(2, "base64\ndes\ndes-ecb\ndes-cbc\ndes3\ndes3-ecb\ndes3-cbc\n", 50);
+	return (0);
 }

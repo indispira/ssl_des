@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/18 22:59:14 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/24 19:23:47 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	ssl_init_env(t_env *e)
 	e->pass3 = NULL;
 	e->infile = NULL;
 	e->outfile = NULL;
+	e->iv = NULL;
 	e->data = NULL;
 	e->out = NULL;
 	e->nb_blocks = 0;
@@ -82,7 +83,7 @@ void	des_init_blocks(t_env *e, t_des *des)
 	des->blocks[i] = NULL;
 }
 
-void	des_init_struct(t_des *des)
+void	des_init_struct(t_env *e, t_des *des)
 {
 	int i;
 
@@ -99,4 +100,10 @@ void	des_init_struct(t_des *des)
 	ft_memset(des->exp, 0, 8);
 	ft_memset(des->box, 0, 4);
 	ft_memset(des->perm, 0, 4);
+	if (e->cmd & CBC || e->cmd & CBC3)
+	{
+		ft_memset(des->iv, 0, 8);
+		ft_memset(des->iv2, 0, 8);
+		des_str_to_hex(e, des);
+	}
 }

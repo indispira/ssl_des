@@ -6,7 +6,7 @@
 #    By: sboulet <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/26 09:58:09 by sboulet           #+#    #+#              #
-#    Updated: 2016/03/28 17:03:38 by sboulet          ###   ########.fr        #
+#*   Updated: 2018/02/24 18:05:27 by jhezard          ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SRCS =		ft_isdigit.c ft_memset.c ft_strchr.c ft_strlcat.c ft_strrchr.c \
 			ft_strjoin.c ft_strnstr.c ft_lstnew.c ft_lstdelone.c ft_lstdel.c \
 			ft_lstadd.c ft_lstiter.c ft_lstmap.c get_next_line.c ft_gnl.c\
 			ft_memrealloc.c ft_itoa_base.c ft_atoi_base.c ft_atoi_hexa.c \
-			ft_tabrev.c ft_intlen.c
+			ft_tabrev.c ft_intlen.c ft_hex.c
 OBJS =		$(SRCS:.c=.o)
 
 all :		$(NAME)

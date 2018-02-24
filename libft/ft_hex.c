@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_hex.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/24 17:02:02 by jhezard          ###   ########.fr       */
+/*   Created: 2015/11/25 15:50:44 by sboulet           #+#    #+#             */
+/*   Updated: 2018/02/24 18:03:21 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "h_ssl_des.h"
+#include "libft.h"
 
-int			main(int ac, char **av)
+int	ft_hex(char c)
 {
-	t_env	e;
-
-	if (ac == 1)
-		write(1, "usage: ft_ssl command [command opts] [command args]\n", 52);
-	else
-	{
-		ssl_init_env(&e);
-		if (ssl_parse(ac, av, &e) && ssl_read(&e))
-		{
-			ssl_dispatch(&e);
-			ssl_output(&e);
-		}
-		ssl_free_env(&e);
-	}
+	if (c >= 'a' && c <= 'f')
+		return (10 + c - 'a');
+	if (c >= 'A' && c <= 'F')
+		return (10 + c - 'A');
+	if (c >= '0' && c <= '9')
+		return (c - '0');
 	return (0);
 }

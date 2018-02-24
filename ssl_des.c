@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/18 23:00:48 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/24 13:36:23 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@ static void	des_cut_input_in_64bits_block(t_env *e, t_des *des)
 {
 	int i;
 
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
 	des_init_blocks(e, des);
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
 	des_init_ciphers(e, des);
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
 	i = -1;
 	while (++i < e->length)
 		des->blocks[i / 8][i % 8] = e->data[i];
@@ -42,14 +45,15 @@ void		des_depadding(t_env *e)
 	e->length = new_len;
 }
 
-int			des_encode(t_env *e, const char *pass)
+int			des_encode(t_env *e, const char *pass, char flag)
 {
 	t_des	des;
 	int		i;
 
 	dprintf(2, "Enter to %s\n", __FUNCTION__);
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
 	des_init_struct(&des);
-	if (e->flag & FLAG_K)
+	if (flag)
 		ft_memcpy(des.key, pass, 8);
 	else
 		des_create_key(e, &des);
@@ -82,20 +86,24 @@ int			des_encode(t_env *e, const char *pass)
 		i++;
 	}
 	des_free_stc(&des);
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
 	return (0);
 }
 
-int			des_decode(t_env *e, const char *pass)
+int			des_decode(t_env *e, const char *pass, char flag)
 {
 	t_des	des;
 	int		i;
 
 	dprintf(2, "Enter to %s\n", __FUNCTION__);
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
 	des_init_struct(&des);
-	if (e->flag & FLAG_K)
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
+	if (flag)
 		ft_memcpy(des.key, pass, 8);
 	else
 		des_create_key(e, &des);
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
 	des_permuted_choice_1(&des);
 	i = 17;
 	while (--i > 0)
@@ -103,8 +111,10 @@ int			des_decode(t_env *e, const char *pass)
 		des_shift_keys(&des, i, 0);
 		constantes_des_permuted_choice_2(&des, i - 1);
 	}
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
 	des_cut_input_in_64bits_block(e, &des);
 	i = 0;
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
 	while (des.blocks[i])
 	{
 		des_initial_permutation(&des, i);
@@ -112,8 +122,10 @@ int			des_decode(t_env *e, const char *pass)
 		des_final_permutation(&des, i);
 		i++;
 	}
+	printf("Nb %d Length %d\n", e->length, e->nb_blocks);
 	e->out = ft_memalloc(8 * e->nb_blocks + 1);
 	e->length = e->nb_blocks * 8;
+	printf("Nb %d Length %d\n", e->length, e->nb_blocks);
 	i = 0;
 	while (des.ciphers[i])
 	{
@@ -126,5 +138,6 @@ int			des_decode(t_env *e, const char *pass)
 	}
 	des_depadding(e);
 	des_free_stc(&des);
+	printf("Flags %d Length %d NbBlocks %d\n", e->flag, e->length, e->nb_blocks);
 	return (0);
 }

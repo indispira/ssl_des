@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 15:46:29 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/18 16:42:36 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/24 13:42:55 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@
 # define FLAG_I		4
 # define FLAG_O		8
 # define FLAG_A		16
-# define FLAG_K		32
+# define FLAG_K1	32
+# define FLAG_K2	64
+# define FLAG_K3	128
 
 # define BIT_1		1
 # define BIT_2		2
@@ -44,7 +46,7 @@
 typedef struct		s_env
 {
 	char			cmd;
-	char			flag;
+	unsigned char	flag;
 	const char		*pass1;
 	const char		*pass2;
 	const char		*pass3;
@@ -96,8 +98,8 @@ void				base64_encode(t_env *e, char *s, char *msg);
 void				base64_decode(t_env *e, char *s, char *msg);
 void				base64_clean(t_env *e);
 
-int					des_encode(t_env *e, const char *pass);
-int					des_decode(t_env *e, const char *pass);
+int					des_encode(t_env *e, const char *pass, char flag);
+int					des_decode(t_env *e, const char *pass, char flag);
 void				des_create_key(t_env *e, t_des *des);
 void				des_permuted_choice_1(t_des *des);
 void				des_shift_keys(t_des *des, int round, int encode);
@@ -106,6 +108,7 @@ void				des_initial_permutation(t_des *des, int id);
 void				des_feistel_network(t_des *des);
 void				des_function_f(t_des *des, int id, char *block);
 void				des_final_permutation(t_des *des, int id);
+void				des_switch_data(t_env *e);
 
 void				constantes_des_permuted_choice_2(t_des *des, int id);
 void				constantes_des_s_boxes(t_des *des);

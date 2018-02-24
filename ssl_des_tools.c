@@ -6,8 +6,15 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/18 22:56:43 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/24 13:29:33 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "h_ssl_des.h"
+
+void	des_switch_data(t_env *e)
+{
+	ft_memdel((void**)&e->data);
+	e->data = e->out;
+	e->out = NULL;
+}

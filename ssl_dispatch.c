@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/18 22:57:15 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/24 13:59:46 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,11 @@ static void	ssl_flag_a(t_env *e)
 	{
 		base64_clean(e);
 		base64_decode(e, e->data, e->out);
-		ft_memdel((void**)&e->data);
-		e->data = e->out;
-		e->out = NULL;
+		des_switch_data(e);
 	}
 	else
 	{
-		ft_memdel((void**)&e->data);
-		e->data = e->out;
-		e->out = NULL;
+		des_switch_data(e);
 		base64_encode(e, e->data, e->out);
 	}
 
@@ -48,11 +44,11 @@ static void	ssl_dispatch_des(t_env *e)
 	if (e->flag & FLAG_D)
 	{
 		ssl_flag_a(e);
-		des_decode(e, e->pass1);
+		des_decode(e, e->pass1, e->flag & FLAG_K1);
 	}
 	else
 	{
-		des_encode(e, e->pass1);
+		des_encode(e, e->pass1, e->flag & FLAG_K1);
 		ssl_flag_a(e);
 	}
 }
@@ -62,15 +58,23 @@ static void	ssl_dispatch_des3(t_env *e)
 	if (e->flag & FLAG_D)
 	{
 		ssl_flag_a(e);
-		des_decode(e, e->pass1);
-		des_encode(e, e->pass2);
-		des_decode(e, e->pass3);
+		des_decode(e, e->pass1, e->flag & FLAG_K1);
+		e->flag = e->flag ^ FLAG_D;
+		des_switch_data(e);
+		des_encode(e, e->pass2, e->flag & FLAG_K2);
+		e->flag = e->flag ^ FLAG_D;
+		des_switch_data(e);
+		des_decode(e, e->pass3, e->flag & FLAG_K3);
 	}
 	else
 	{
-		des_encode(e, e->pass1);
-		des_decode(e, e->pass2);
-		des_encode(e, e->pass3);
+		des_encode(e, e->pass1, e->flag & FLAG_K1);
+		e->flag = e->flag ^ FLAG_D;
+		des_switch_data(e);
+		des_decode(e, e->pass2, e->flag & FLAG_K2);
+		e->flag = e->flag ^ FLAG_D;
+		des_switch_data(e);
+		des_encode(e, e->pass3, e->flag & FLAG_K3);
 		ssl_flag_a(e);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/18 22:59:37 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/02/24 12:17:06 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,20 @@ static int	ssl_get_next_arg(t_env *e, int ac, char **av, int id)
 {
 	if (id + 1 >= ac)
 		e->cmd & B64 ? ssl_print_usage_base64() : ssl_print_usage_des();
-	if (!ft_strcmp("-k", av[id]))
+	if (!ft_strcmp("-k", av[id]) || !ft_strcmp("-k1", av[id]))
 	{
-		e->flag |= FLAG_K;
+		e->flag |= FLAG_K1;
 		e->pass1 = av[id + 1];
+	}
+	if (!ft_strcmp("-k2", av[id]))
+	{
+		e->flag |= FLAG_K2;
+		e->pass2 = av[id + 1];
+	}
+	if (!ft_strcmp("-k3", av[id]))
+	{
+		e->flag |= FLAG_K3;
+		e->pass3 = av[id + 1];
 	}
 	if (!ft_strcmp("-i", av[id]) || !ft_strcmp("-in", av[id]))
 	{
@@ -64,7 +74,8 @@ static int	ssl_args_parser(int ac, char **av, t_env *e)
 		arg = av[i];
 		if (!ft_strcmp("-k", arg) || !ft_strcmp("-i", arg)
 			|| !ft_strcmp("-in", arg) || !ft_strcmp("-o", arg)
-			|| !ft_strcmp("-out", arg))
+			|| !ft_strcmp("-out", arg) || !ft_strcmp("-k1", arg)
+			|| !ft_strcmp("-k2", arg) || !ft_strcmp("-k3", arg))
 			i = ssl_get_next_arg(e, ac, av, i);
 		else if (*arg == '-')
 			while (*(++arg))

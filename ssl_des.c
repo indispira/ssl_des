@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/28 21:01:25 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/03/02 01:22:10 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	des_cut_input_in_64bits_block(t_env *e, t_des *des)
 	des_init_blocks(e, des);
 	des_init_ciphers(e, des);
 	i = -1;
-	while (++i < e->length)
+	while (++i < e->length && i < e->nb_blocks * 8)
 		des->blocks[i / 8][i % 8] = e->data[i];
 	if (!(e->flag & FLAG_D))
 		while (i % 8 || (!(e->length % 8) && i < e->length + 8))
@@ -27,6 +27,8 @@ static void	des_cut_input_in_64bits_block(t_env *e, t_des *des)
 			des->blocks[i / 8][i % 8] = e->length % 8 ? 8 - e->length % 8 : 8;
 			i++;
 		}
+	else if (e->length % 8 != 0)
+		ssl_error_length(e, des, 64);
 	e->length = i;
 }
 
@@ -71,19 +73,21 @@ static void	des_xor_block(t_env *e, t_des *des, int index)
 //		des->blocks[index][6], des->blocks[index][7]);
 }
 
-static void	des_depadding(t_env *e)
+static void	des_depadding(t_env *e, t_des *des)
 {
 	int		i;
 	int		new_len;
 
 	i = e->out[e->length - 1];
+	if (i > 8 || i < 1)
+		des_error_depadding(e, des);
 	new_len = e->length - i;
 	while (i--)
 		e->out[new_len + i] = '\0';
 	e->length = new_len;
 }
 
-int			des_encode(t_env *e, const char *pass, char flag)
+void		des_encode(t_env *e, const char *pass, char flag)
 {
 	t_des	des;
 	int		i;
@@ -127,10 +131,9 @@ int			des_encode(t_env *e, const char *pass, char flag)
 		i++;
 	}
 	des_free_stc(&des);
-	return (0);
 }
 
-int			des_decode(t_env *e, const char *pass, char flag)
+void		des_decode(t_env *e, const char *pass, char flag)
 {
 	t_des	des;
 	int		i;
@@ -181,7 +184,6 @@ int			des_decode(t_env *e, const char *pass, char flag)
 //			des.ciphers[i][6], des.ciphers[i][7]);
 		i++;
 	}
-	des_depadding(e);
+	des_depadding(e, &des);
 	des_free_stc(&des);
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/24 12:48:22 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/03/02 00:25:09 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void		des_create_key(t_env *e, t_des *des)
 	{
 		ft_putendl("Wrong password.");
 		ssl_free_env(e);
+		des_free_stc(des);
 		ft_memdel((void**)&tmp1);
 		ft_memdel((void**)&tmp2);
 		exit(0);
@@ -105,4 +106,14 @@ void		des_create_key(t_env *e, t_des *des)
 	ft_memcpy(des->key, tmp1, 8);
 	ft_memdel((void**)&tmp1);
 	ft_memdel((void**)&tmp2);
+}
+
+void		des_create_iv(t_des *des)
+{
+	char	*tmp;
+
+	tmp = getpass("enter des initial vector:");
+	printf("IV %s\n", tmp);
+	des_str_to_hex(des, tmp);
+	ft_memdel((void**)&tmp);
 }

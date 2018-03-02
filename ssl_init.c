@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/24 19:23:47 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/03/02 00:29:18 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,9 @@ void	des_init_struct(t_env *e, t_des *des)
 	{
 		ft_memset(des->iv, 0, 8);
 		ft_memset(des->iv2, 0, 8);
-		des_str_to_hex(e, des);
+		if (!(e->flag & FLAG_V))
+			des_create_iv(des);
+		else
+			des_str_to_hex(des, (char*)e->iv);
 	}
 }

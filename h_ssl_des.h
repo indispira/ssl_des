@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 15:46:29 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/24 19:23:15 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/03/02 00:22:08 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ int					ssl_help(char *s);
 void				ssl_print_usage(t_env *e);
 void				ssl_memory_error(t_env *e, t_des *des, const char *fct);
 void				ssl_error_flags(const char *arg, char flag, t_env *e);
+void				ssl_error_length(t_env *e, t_des *des, int length);
+void				des_error_depadding(t_env *e, t_des *des);
 
 // free
 void				ssl_free_env(t_env *e);
@@ -107,9 +109,10 @@ void				base64_decode(t_env *e, char *s, char *msg);
 void				base64_clean(t_env *e);
 
 // DES functions
-int					des_encode(t_env *e, const char *pass, char flag);
-int					des_decode(t_env *e, const char *pass, char flag);
+void				des_encode(t_env *e, const char *pass, char flag);
+void				des_decode(t_env *e, const char *pass, char flag);
 void				des_create_key(t_env *e, t_des *des);
+void				des_create_iv(t_des *des);
 void				des_permuted_choice_1(t_des *des);
 void				des_shift_keys(t_des *des, int round, int encode);
 void				des_permuted_choice_2(t_des *des, int i);
@@ -118,7 +121,7 @@ void				des_feistel_network(t_des *des);
 void				des_function_f(t_des *des, int id, char *block);
 void				des_final_permutation(t_des *des, int id);
 void				des_switch_data(t_env *e);
-void				des_str_to_hex(t_env *e, t_des *des);
+void				des_str_to_hex(t_des *des, char *str);
 
 // constantes
 void				constantes_des_permuted_choice_2(t_des *des, int id);

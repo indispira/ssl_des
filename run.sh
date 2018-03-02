@@ -34,4 +34,6 @@ echo "one deep secret" | ./ft_ssl des-cbc -a -k abcdabcd -v 0011223344556677 && 
 echo "one deep secret" | openssl des-cbc -a -K 6162636461626364 -iv 0011223344556677 && echo "" && \
 echo "zqYWONX68rWNxl7msIdGC67Uh2HfVEBo" | ./ft_ssl des-cbc -ad -k abcdabcd -v 0011223344556677 && \
 echo "zqYWONX68rWNxl7msIdGC67Uh2HfVEBo" | openssl des-cbc -a -d -K 6162636461626364 -iv 0011223344556677 && echo "" && \
+echo "zqYWONX68rWNxl7msIdGC67Uh2HfVEBo" | ./ft_ssl des-cbc -ad -v 0011223344556677 && \
+echo "zqYWONX68rWNxl7msIdGC67Uh2HfVEBo" | ./ft_ssl des-cbc -ad -k abcdabcd && \
 echo "Test finished"

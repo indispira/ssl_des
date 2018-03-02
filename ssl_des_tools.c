@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/24 18:27:50 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/03/02 00:18:49 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,11 @@ void	des_switch_data(t_env *e)
 	e->out = NULL;
 }
 
-void	des_str_to_hex(t_env *e, t_des *des)
+void	des_str_to_hex(t_des *des, char *str)
 {
 	int	i;
 
 	i = -1;
-	while (++i < 8 && e->iv[i * 2] && e->iv[i * 2 + 1])
-		des->iv[i] = ft_hex(e->iv[i * 2]) * 16 + ft_hex(e->iv[i * 2 + 1]);
+	while (++i < 8 && str[i * 2] && str[i * 2 + 1])
+		des->iv[i] = ft_hex(str[i * 2]) * 16 + ft_hex(str[i * 2 + 1]);
 }
-
-
-
-
-
-
-

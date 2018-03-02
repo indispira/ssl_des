@@ -6,7 +6,7 @@
 /*   By: sboulet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 17:13:39 by sboulet           #+#    #+#             */
-/*   Updated: 2018/02/24 17:03:53 by jhezard          ###   ########.fr       */
+/*   Updated: 2018/03/01 23:42:37 by jhezard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,14 @@ int		ssl_help(char *s)
 	write(2, "Message Digest commands:\n\nCipher commands:\n", 43);
 	write(2, "base64\ndes\ndes-ecb\ndes-cbc\ndes3\ndes3-ecb\ndes3-cbc\n", 50);
 	return (0);
+}
+
+void	ssl_error_length(t_env *e, t_des *des, int length)
+{
+	ssl_free_env(e);
+	des_free_stc(des);
+	write(2, "Wrong length of input data, need a length modulo ", 49);
+	ft_putnbr_fd(length, 2);
+	write(2, "bits.\n", 6);
+	exit(0);
 }

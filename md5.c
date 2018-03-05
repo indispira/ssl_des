@@ -3,10 +3,12 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <math.h>
+#include <limits.h>
 
 int	main(void)
 {
-	char			*str = "The quick brown fox jumps over the lazy dog";
+	// char			*str = "The quick brown fox jumps over the lazy dog";
+	char			*str = "The quick brown fox jumps over the lazy dog.";
 	char			b512[64];
 	unsigned int	a0 = 1732584193;
 	unsigned int	b0 = 4023233417;
@@ -38,8 +40,9 @@ int	main(void)
 	// Set the 512 block
 	memset(b512, 0, 64);
 	memcpy(b512, str, strlen(str));
-	b512[strlen(str)] = 1;
-	b512[63] = strlen(str);
+	b512[strlen(str)] = 1 << 7;
+	*(unsigned int*)(b512 + 56) = strlen(str) * 8 % UINT_MAX;
+	*(unsigned int*)(b512 + 60) = strlen(str) * 8 / UINT_MAX;
 	memset(result, 0, 16);
 
 	// Print the 512 block
@@ -49,15 +52,18 @@ int	main(void)
 	// Divise the 512 block in 16 blocks of 32 bits
 	for (unsigned int i = 0; i < 16; i++)
 	{
-		printf("b512 %2hhx%2hhx%2hhx%2hhx\n", *(b512 + i * 4), *(b512 + i * 4 + 1),
-			*(b512 + i * 4 + 2), *(b512 + i * 4 + 3));
+		printf("b512 %2hhx%2hhx%2hhx%2hhx  %2hhx%2hhx%2hhx%2hhx\n",
+			*(b512 + i * 4), *(b512 + i * 4 + 1),
+			*(b512 + i * 4 + 2), *(b512 + i * 4 + 3),
+			*(b512 + i * 4 + 3), *(b512 + i * 4 + 2),
+			*(b512 + i * 4 + 1), *(b512 + i * 4));
 		m[i] = 0;
-		m[i] |= (*(b512 + i * 4) << 24) + (*(b512 + i * 4 + 1) << 16) + (*(b512 + i * 4 + 2) << 8) + *(b512 + i * 4 + 3);
-		// m[i] |= *(b512 + i * 4) << 24;
-		// m[i] |= *(b512 + i * 4 + 1) << 16;
-		// m[i] |= *(b512 + i * 4 + 2) << 8;
-		// m[i] |= *(b512 + i * 4 + 3);
-		printf("m[i] %8x\n\n", m[i]);
+		m[i] |= *(b512 + i * 4) & 255;
+		m[i] |= *(b512 + i * 4 + 1) << 8 & 65280;
+		m[i] |= *(b512 + i * 4 + 2) << 16 & 16711680;
+		m[i] |= *(b512 + i * 4 + 3) << 24 & 4278190080;
+		// m[i] |= *(b512 + i * 4) + (*(b512 + i * 4 + 1) << 8) + (*(b512 + i * 4 + 2) << 16) + (*(b512 + i * 4 + 3) << 24);
+		printf("m[%u] %8x  %u\n\n", i, m[i], m[i]);
 		// memcpy(m[i], b512 + i * 4, 4);
 	}
 
@@ -96,6 +102,8 @@ int	main(void)
 		d = c;
 		c = b;
 		b = b + (f << s[i]);
+		b = b + (f >> (32 - s[i]));
+		printf("[%2u] %10u %10u %10u %10u\n", i, a, b, c, d);
 	}
 
 	// Inside the loop of each 512 block
@@ -106,6 +114,10 @@ int	main(void)
 
 	// Recompose the result
 	// var char digest[16] := a0 append b0 append c0 append d0
+	printf("A %8x\n", a0);
+	printf("B %8x\n", b0);
+	printf("C %8x\n", c0);
+	printf("D %8x\n", d0);
 	memcpy(result, &a0, 4);
 	memcpy(result + 4, &b0, 4);
 	memcpy(result + 8, &c0, 4);
@@ -117,6 +129,7 @@ int	main(void)
 	printf("\n");
 
 	// Print the final result from wikipedia
+	write(1, "e4d909c290d0fb1ca068ffaddf22cbd0\n", 33);
 	write(1, "9e107d9d372bb6826bd81d3542a419d6\n", 33);
 	return (0);
 }

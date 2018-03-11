@@ -13,10 +13,22 @@ uint32_t rotr32 (unsigned int value, unsigned int count)
     return (value >> count) | (value << (-count & mask));
 }
 
+void	switch_endianess(char *s)
+{
+	char	tmp[4];
+
+	tmp[0] = s[3];
+	tmp[1] = s[2];
+	tmp[2] = s[1];
+	tmp[3] = s[0];
+	memcpy(s, tmp, 4);
+}
+
 int	main(void)
 {
-	char			*str = "The quick brown fox jumps over the lazy dog";
-	// char			*str = "The quick brown fox jumps over the lazy dog.";
+	// char			*str = "abc";
+	// char			*str = "The quick brown fox jumps over the lazy dog";
+	char			*str = "The quick brown fox jumps over the lazy dog.";
 	char			b512[64];
 	unsigned int	h0 = 0x6a09e667;
 	unsigned int	h1 = 0xbb67ae85;
@@ -53,11 +65,16 @@ int	main(void)
 	memset(b512, 0, 64);
 	memcpy(b512, str, strlen(str));
 	b512[strlen(str)] = 1 << 7;
-	*(unsigned int*)(b512 + 56) = strlen(str) * 8 % UINT_MAX;
-	*(unsigned int*)(b512 + 60) = strlen(str) * 8 / UINT_MAX;
+	*(unsigned int*)(b512 + 60) = strlen(str) * 8 % UINT_MAX;
+	*(unsigned int*)(b512 + 56) = strlen(str) * 8 / UINT_MAX;
+	switch_endianess(b512 + 56);
+	switch_endianess(b512 + 60);
+	//*(unsigned int*)(b512 + 56) = strlen(str) * 8 % UINT_MAX;
+	//*(unsigned int*)(b512 + 60) = strlen(str) * 8 / UINT_MAX;
 	memset(result, 0, 16);
 
 	// Print the 512 block
+	write(1, "START\n", 6);
 	write(1, b512, 64);
 	write(1, "\n", 1);
 
@@ -70,10 +87,14 @@ int	main(void)
 			*(b512 + i * 4 + 3), *(b512 + i * 4 + 2),
 			*(b512 + i * 4 + 1), *(b512 + i * 4));
 		m[i] = 0;
-		m[i] |= *(b512 + i * 4) & 255;
-		m[i] |= *(b512 + i * 4 + 1) << 8 & 65280;
-		m[i] |= *(b512 + i * 4 + 2) << 16 & 16711680;
-		m[i] |= *(b512 + i * 4 + 3) << 24 & 4278190080;
+		m[i] |= *(b512 + i * 4 + 3) & 255;
+		m[i] |= *(b512 + i * 4 + 2) << 8 & 65280;
+		m[i] |= *(b512 + i * 4 + 1) << 16 & 16711680;
+		m[i] |= *(b512 + i * 4 ) << 24 & 4278190080;
+		//m[i] |= *(b512 + i * 4) & 255;
+		//m[i] |= *(b512 + i * 4 + 1) << 8 & 65280;
+		//m[i] |= *(b512 + i * 4 + 2) << 16 & 16711680;
+		//m[i] |= *(b512 + i * 4 + 3) << 24 & 4278190080;
 		printf("m[%2u] %08x  %u\n\n", i, m[i], m[i]);
 	}
 
@@ -100,8 +121,10 @@ int	main(void)
 		unsigned int ch, ma, t1, t2;
 		ch = (e & f) ^ ((~e) & g);
 		ma = (a & b) ^ (a & c) ^ (b & c);
-		s0 = rotr32(e, 6) ^ rotr32(e, 11) ^ rotr32(e, 25);
-		s1 = rotr32(a, 2) ^ rotr32(a, 13) ^ rotr32(a, 22);
+		s1 = rotr32(e, 6) ^ rotr32(e, 11) ^ rotr32(e, 25);
+		s0 = rotr32(a, 2) ^ rotr32(a, 13) ^ rotr32(a, 22);
+		// s0 = rotr32(e, 6) ^ rotr32(e, 11) ^ rotr32(e, 25);
+		// s1 = rotr32(a, 2) ^ rotr32(a, 13) ^ rotr32(a, 22);
 		t1 = h + s1 + ch + k[i] + m[i];
 		t2 = s0 + ma;
 		h = g;
@@ -112,7 +135,7 @@ int	main(void)
 		c = b;
 		b = a;
 		a = t1 + t2;
-		printf("[%2u] %10u %10u %10u %10u %10u %10u %10u %10u\n",
+		printf("%2u. %8x %8x %8x %8x %8x %8x %8x %8x\n",
 			i, a, b, c, d, e, f, g, h);
 	}
 
@@ -143,6 +166,8 @@ int	main(void)
 	memcpy(result + 20, &h5, 4);
 	memcpy(result + 24, &h6, 4);
 	memcpy(result + 28, &h7, 4);
+	for (unsigned int i = 0; i < 32; i += 4)
+		switch_endianess(result + i);
 
 	// Print the result
 	for (unsigned int i = 0; i < 32; i++)
@@ -150,8 +175,9 @@ int	main(void)
 	printf("\n");
 
 	// Print the final result from wikipedia
-	write(1, "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592\n", 65);
-	// write(1, "ef537f25c895bfa782526529a9b63d97aa631564d5d789c2b765448c8635fb6c\n", 65);
+	// write(1, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\n", 65);
+	// write(1, "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592\n", 65);
+	write(1, "ef537f25c895bfa782526529a9b63d97aa631564d5d789c2b765448c8635fb6c\n", 65);
 	return (0);
 }
 

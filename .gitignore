@@ -1,5 +1,6 @@
 ft_ssl
 log*
+ref
 
 # Prerequisites
 *.d
